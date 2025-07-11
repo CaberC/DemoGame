@@ -9,7 +9,7 @@ namespace Caber.DemoGame.Player
         private Rigidbody _rigidbody;
         // moveSpeed is the base speed multiplier for player movment
         public float moveSpeed = 10f;
-        public float jumpForce = 2000f;
+        public float jumpForce = 10f;
         public float rotateSpeed = 10f;
         // 
         public InputActionAsset InputActions;
@@ -59,17 +59,17 @@ namespace Caber.DemoGame.Player
                 Jump();
             }
             
-            GroundedMove();
+            
         }
     
-        /* FixedUpdate runs when the script is initialized
+        /* FixedUpdate runs at set intervals of frames
          in: void
          out: void
          throws: none
          */
         void FixedUpdate()
         {
-            
+            GroundedMove();
         }
 
         private void OnEnable()
@@ -89,17 +89,20 @@ namespace Caber.DemoGame.Player
          */
         void GroundedMove()
         {
-            _rigidbody.MovePosition(_rigidbody.position +
-                                    transform.forward * _moveInput.y * moveSpeed * Time.deltaTime);
+            Vector3 movement = new Vector3(_moveInput.x, 0, _moveInput.y);
+            _rigidbody.MovePosition(transform.position + movement * moveSpeed * Time.deltaTime);
         }
         
         private void Jump()
         {
             _rigidbody.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotationY;
-            Debug.Log("Jump: "+jumpForce);
         }
 
+        private void Look()
+        {
+            
+        }
     }
     
 }
